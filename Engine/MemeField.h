@@ -27,6 +27,7 @@ public:
 private:
 	Tile& TileAt( const Vei2& gridPos );
 	const Tile& TileAt( const Vei2& gridPos ) const;
+	RectI GetRect() const;
 private:
 	static constexpr int width = 20;
 	static constexpr int height = 16;

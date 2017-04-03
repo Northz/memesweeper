@@ -64,9 +64,9 @@ MemeField::MemeField( int nMemes )
 
 void MemeField::Draw( Graphics& gfx ) const
 {
-	for( Vei2 gridPos = { 0, 0 }; gridPos.y < height - 1; gridPos.y++ )
+	for( Vei2 gridPos = { 0, 0 }; gridPos.y < height; gridPos.y++ )
 	{
-		for( ; gridPos.x < width - 1; gridPos.x++ )
+		for( gridPos.x = 0 ; gridPos.x < width; gridPos.x++ )
 		{
 			TileAt( gridPos ).Draw( gridPos * SpriteCodex::tileSize, gfx );
 		}

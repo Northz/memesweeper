@@ -94,6 +94,22 @@ void MemeField::Draw( Graphics& gfx ) const
 	}
 }
 
+RectI MemeField::GetRect() const
+{
+	return RectI( 0, width * SpriteCodex::tileSize, 0, height * SpriteCodex::tileSize );
+}
+
+void MemeField::OnRevealClick( const Vei2 & screenPos )
+{
+	const Vei2 gridPos = ScreenToGrid( screenPos );
+	assert( gridPos.x >= 0 && gridPos.x < width && gridPos.y >= 0 && gridPos.y < height );
+	Tile& tile = TileAt( gridPos );
+	if( !tile.isRevealed() )
+	{
+		tile.Reveal();
+	}
+}
+
 MemeField::Tile& MemeField::TileAt( const Vei2& gridPos )
 {
 	return field[gridPos.y * width + gridPos.x];
@@ -104,7 +120,9 @@ const  MemeField::Tile & MemeField::TileAt( const Vei2 & gridPos ) const
 	return field[gridPos.y * width + gridPos.x];
 }
 
-RectI MemeField::GetRect() const
+Vei2 MemeField::ScreenToGrid( const Vei2 & screenPos )
 {
-	return RectI( 0, width * SpriteCodex::tileSize, 0, height * SpriteCodex::tileSize );
+	return screenPos / SpriteCodex::tileSize;
 }
+
+

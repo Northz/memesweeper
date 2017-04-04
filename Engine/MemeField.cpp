@@ -158,6 +158,12 @@ void MemeField::Draw( Graphics& gfx ) const
 	}
 }
 
+void MemeField::DrawWin( Graphics& gfx ) const
+{
+	const Vei2 centerPos = { Graphics::ScreenWidth / 2, Graphics::ScreenHeight / 2 };
+	SpriteCodex::DrawWin( centerPos, gfx );
+}
+
 RectI MemeField::GetRect() const
 {
 	return RectI( xOffset, xOffset + width * SpriteCodex::tileSize, yOffset, yOffset + height * SpriteCodex::tileSize );
@@ -165,7 +171,7 @@ RectI MemeField::GetRect() const
 
 void MemeField::OnRevealClick( const Vei2& screenPos )
 {
-	if( !isFucked )
+	if( !isFucked && !isWon )
 	{
 		const Vei2 gridPos = ScreenToGrid( screenPos );
 		assert( gridPos.x >= 0 && gridPos.x < width && gridPos.y >= 0 && gridPos.y < height );
@@ -177,13 +183,17 @@ void MemeField::OnRevealClick( const Vei2& screenPos )
 			{
 				isFucked = true;
 			}
+			else
+			{
+				CheckIfWon();
+			}
 		}
 	}
 }
 
 void MemeField::OnFlagClick( const Vei2 & screenPos )
 {
-	if( !isFucked )
+	if( !isFucked && !isWon )
 	{
 		const Vei2 gridPos = ScreenToGrid( screenPos );
 		assert( gridPos.x >= 0 && gridPos.x < width && gridPos.y >= 0 && gridPos.y < height );
@@ -191,6 +201,32 @@ void MemeField::OnFlagClick( const Vei2 & screenPos )
 		if( !tile.IsRevealed() )
 		{
 			tile.ToggleFlag();
+			CheckIfWon();
+		}
+	}
+}
+
+bool MemeField::HasWon() const
+{
+	return isWon;
+}
+
+void MemeField::CheckIfWon()
+{
+	int i = 0;
+	for( Tile tile : field )
+	{
+		if( ( tile.HasMeme() && !tile.IsFlagged() ) || ( !tile.HasMeme() && !tile.IsRevealed() ) )
+		{
+			break;
+		}
+		else if( i >= width * height - 1)
+		{
+			isWon = true;
+		}
+		else
+		{
+			i++;
 		}
 	}
 }

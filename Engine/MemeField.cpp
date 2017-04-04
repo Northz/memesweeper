@@ -180,13 +180,17 @@ void MemeField::OnRevealClick( const Vei2& screenPos )
 				isFucked = true;
 				sndLose.Play();
 			}
+			else if( GameIsWon() )
+			{
+				isWinrar = true;
+			}
 		}
 	}
 }
 
 void MemeField::OnFlagClick( const Vei2 & screenPos )
 {
-	if( !isFucked )
+	if( !isFucked && !GameIsWon() )
 	{
 		const Vei2 gridPos = ScreenToGrid( screenPos );
 		assert( gridPos.x >= 0 && gridPos.x < width && gridPos.y >= 0 && gridPos.y < height );
@@ -194,6 +198,10 @@ void MemeField::OnFlagClick( const Vei2 & screenPos )
 		if( !tile.IsRevealed() )
 		{
 			tile.ToggleFlag();
+			if( GameIsWon() )
+			{
+				isWinrar = true;
+			}
 		}
 	}
 }

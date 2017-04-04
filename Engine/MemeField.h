@@ -37,6 +37,7 @@ public:
 	void OnFlagClick( const Vei2& screenPos );
 	bool GameIsWon() const;
 	bool GameIsLost() const;
+	bool isWinrar = false;
 private:
 	Tile& TileAt( const Vei2& gridPos );
 	const Tile& TileAt( const Vei2& gridPos ) const;

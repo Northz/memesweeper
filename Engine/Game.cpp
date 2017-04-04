@@ -26,7 +26,7 @@ Game::Game( MainWindow& wnd )
 	:
 	wnd( wnd ),
 	gfx( wnd ),
-	field( gfx.GetRect().GetCenter(),4 )
+	field( gfx.GetRect().GetCenter(),1 )
 {
 }
 
@@ -40,26 +40,23 @@ void Game::Go()
 
 void Game::UpdateModel()
 {
-	if( !field.GameIsWon() )
+	while( !wnd.mouse.IsEmpty() )
 	{
-		while( !wnd.mouse.IsEmpty() )
+		const auto e = wnd.mouse.Read();
+		if( e.GetType() == Mouse::Event::Type::LPress )
 		{
-			const auto e = wnd.mouse.Read();
-			if( e.GetType() == Mouse::Event::Type::LPress )
+			const Vei2 mousePos = e.GetPos();
+			if( field.GetRect().Contains( mousePos ) )
 			{
-				const Vei2 mousePos = e.GetPos();
-				if( field.GetRect().Contains( mousePos ) )
-				{
-					field.OnRevealClick( mousePos );
-				}
+				field.OnRevealClick( mousePos );
 			}
-			else if( e.GetType() == Mouse::Event::Type::RPress )
+		}
+		else if( e.GetType() == Mouse::Event::Type::RPress )
+		{
+			const Vei2 mousePos = e.GetPos();
+			if( field.GetRect().Contains( mousePos ) )
 			{
-				const Vei2 mousePos = e.GetPos();
-				if( field.GetRect().Contains( mousePos ) )
-				{
-					field.OnFlagClick( mousePos );
-				}
+				field.OnFlagClick( mousePos );
 			}
 		}
 	}
@@ -68,7 +65,7 @@ void Game::UpdateModel()
 void Game::ComposeFrame()
 {
 	field.Draw( gfx );
-	if( field.GameIsWon() )
+	if( field.isWinrar )
 	{
 		SpriteCodex::DrawWin( gfx.GetRect().GetCenter(),gfx );
 	}

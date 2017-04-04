@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Graphics.h"
+#include "SpriteCodex.h"
 
 class MemeField
 {
@@ -42,6 +43,9 @@ private:
 private:
 	static constexpr int width = 20;
 	static constexpr int height = 16;
+	static constexpr int xOffset = Graphics::ScreenWidth / 2 - width / 2 * SpriteCodex::tileSize;
+	static constexpr int yOffset = Graphics::ScreenHeight / 2 - height / 2 * SpriteCodex::tileSize;
+	const Vei2 offset = { xOffset, yOffset };
 	bool isFucked = false;
 	Tile field[width * height];
 };
